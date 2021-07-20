@@ -2,7 +2,7 @@
     "name": "suzuken/qldb-driver-php",
     "description": "Unofficial AWS QLDB Driver for PHP",
     "type": "library",
-    "license": "MIT",
+    "license": "Apache-2.0",
     "authors": [
         {
             "name": "suzuken",
