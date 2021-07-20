@@ -1,0 +1,13 @@
+{
+    "name": "suzuken/qldb-driver-php",
+    "description": "Unofficial AWS QLDB Driver for PHP",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "suzuken",
+            "email": "suzuken326@gmail.com"
+        }
+    ],
+    "require": {}
+}
