@@ -26,8 +26,10 @@ trait ResponseTrait
         switch ($name) {
             case 'int':
             case 'bool':
+            case 'float':
             case 'string':
                 $this->$attr = $value;
+                break;
             case 'array':
                 $t = $this->readArrayVar($prop);
                 if ($t === null) {
@@ -35,6 +37,7 @@ trait ResponseTrait
                     break;
                 }
                 $this->$attr = array_map(fn ($v) => new $t($v), $value);
+                break;
             default:
                 // NOTE: user defined class.
                 $this->$attr = new $name($value);
@@ -50,7 +53,15 @@ trait ResponseTrait
         // parse `@var Foo[]` as Foo.
         if (preg_match('/@var\s+([^\s]+)\[\]/', $docComment, $matches)) {
             [, $type] = $matches;
-            return $type;
+            switch ($type) {
+                case 'int':
+                case 'bool':
+                case 'string':
+                case 'float':
+                    return $type;
+                default:
+                    return __NAMESPACE__ . '\\' . $type;
+            }
         }
         return null;
     }
