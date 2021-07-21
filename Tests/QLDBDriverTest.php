@@ -7,11 +7,10 @@ use PHPUnit\Framework\TestCase;
 use Suzuken\QLDBDriver\QLDBDriver;
 
 class QLDBDriverTest extends TestCase {
-
     /**
      * @test
      */
-    public function testName()
+    public function testNew()
     {
         $qldbSession = new QLDBSessionClient([
             'region' => 'ap-northeast-1',
