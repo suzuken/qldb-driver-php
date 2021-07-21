@@ -60,6 +60,7 @@ trait ResponseTrait
                 case 'float':
                     return $type;
                 default:
+                    // NOTE: This class resolver only worked for this library.
                     return __NAMESPACE__ . '\\' . $type;
             }
         }

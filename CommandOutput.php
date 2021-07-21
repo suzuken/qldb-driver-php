@@ -68,6 +68,7 @@ class Page extends Response
 
 class ValueHolder extends Response
 {
+    // TODO decode ion binary
     public string $IonBinary;
     public string $IonText;
 }

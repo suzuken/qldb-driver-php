@@ -46,5 +46,7 @@ class CommunicatorTest extends TestCase
         $output = new CommandOutput($resp);
         $e = $output->ExecuteStatement;
         $this->assertSame(100, $e->ConsumedIOs->ReadIOs);
+        $this->assertSame('foo', $e->FirstPage->Values[0]->IonBinary);
+        $this->assertSame(500, $e->TimingInformation->ProcessingTimeMilliseconds);
     }
 }

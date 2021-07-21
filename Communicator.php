@@ -22,25 +22,28 @@ class Communicator
                 'LedgerName' => $ledgerName,
             ],
         ]);
-        $this->sessionToken = $resp['SessionToken'];
+        $this->sessionToken = $resp->StartSession->SessionToken;
     }
 
-    public function endSession()
+    public function endSession(): EndSessionResponse
     {
-        return $this->execute(['EndSession' => []]);
+        $resp = $this->execute(['EndSession' => []]);
+        return $resp->EndSession;
     }
 
-    public function abortTransaction()
+    public function abortTransaction(): AbortTransactionResponse
     {
-        return $this->execute(['AbortTransaction' => []]);
+        $resp = $this->execute(['AbortTransaction' => []]);
+        return $resp->AbortTransaction;
     }
 
-    public function commitTransaction(string $digest, string $transactionId)
+    public function commitTransaction(string $digest, string $transactionId): CommitTransactionResponse
     {
-        return $this->execute(['CommitTransaction' => [
+        $resp = $this->execute(['CommitTransaction' => [
             'CommitDigest' => $digest, // REQUIRED
             'TransactionId' => $transactionId, // REQUIRED
         ]]);
+        return $resp->CommitTransaction;
     }
 
     /**
@@ -49,30 +52,33 @@ class Communicator
      * @param string $transactionId
      * @return \Aws\Result
      */
-    public function executeStatement(array $parameters, string $statement, string $transactionId)
+    public function executeStatement(array $parameters, string $statement, string $transactionId): CommitTransactionResponse
     {
-        return $this->execute(['CommitTransaction' => [
+        $resp = $this->execute(['CommitTransaction' => [
             // see: https://stackoverflow.com/questions/4345554/convert-a-php-object-to-an-associative-array
             'Parameters' => json_decode(json_encode($parameters), true),
             'Statement' => $statement, // REQUIRED
             'TransactionId' => $transactionId, // REQUIRED
         ]]);
+        return $resp->CommitTransaction;
     }
 
-    public function fetchPage(string $nextPageToken, string $transactionId)
+    public function fetchPage(string $nextPageToken, string $transactionId): FetchPageResponse
     {
-        return $this->execute(['FetchPage' => [
+        $resp = $this->execute(['FetchPage' => [
             'NextPageToken' => $nextPageToken,
             'TransactionId' => $transactionId, // REQUIRED
         ]]);
+        return $resp->FetchPage;
     }
 
-    public function startTransaction()
+    public function startTransaction(): StartTransactionResponse
     {
-        return $this->execute(['StartTransaction' => []]);
+        $resp = $this->execute(['StartTransaction' => []]);
+        return $resp->StartTransaction;
     }
 
-    public function execute($args)
+    public function execute($args): CommandOutput
     {
         $resp = $this->service->sendCommand($args);
         return new CommandOutput($resp);
