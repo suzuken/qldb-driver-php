@@ -74,16 +74,40 @@ class Communicator
 
     public function execute($args)
     {
-        return $this->service->sendCommand($args);
+        $resp = $this->service->sendCommand($args);
+        return new CommandOutput($resp);
     }
 }
 
-class AbortTransactionResponse
+class Response
+{
+    use ResponseTrait;
+
+    public function __construct(array $data)
+    {
+        $this->populate($data);
+    }
+}
+
+class CommandOutput extends Response
+{
+    use ResponseTrait;
+
+    public AbortTransactionResponse $AbortTransactionResponse;
+    public CommitTransactionResponse $CommitTransactionResponse;
+    public EndSessionResponse $EndSessionResponse;
+    public ExecuteStatementResponse $ExecuteStatementResponse;
+    public FetchPageResponse $FetchPageResponse;
+    public StartSessionResponse $StartSessionResponse;
+    public StartTransactionResponse $StartTransactionResponse;
+}
+
+class AbortTransactionResponse extends Response
 {
     public TimingInformation $TimingInformation;
 }
 
-class CommitTransactionResponse
+class CommitTransactionResponse extends Response
 {
     public string $CommitDigest;
     public IOUsage $ConsumedIOs;
@@ -91,26 +115,26 @@ class CommitTransactionResponse
     public string $TransactionId;
 }
 
-class EndSessionResponse
+class EndSessionResponse extends Response
 {
     public TimingInformation $TimingInformation;
 }
 
-class ExecuteStatementResponse
+class ExecuteStatementResponse extends Response
 {
     public IOUsage $ConsumedIOs;
     public Page $FirstPage;
     public TimingInformation $TimingInformation;
 }
 
-class FetchPageResponse
+class FetchPageResponse extends Response
 {
     public IOUsage $ConsumedIOs;
     public Page $Page;
     public TimingInformation $TimingInformation;
 }
 
-class Page
+class Page extends Response
 {
     public string $NextPageToken;
     /**
@@ -119,37 +143,37 @@ class Page
     public array $Values;
 }
 
-class ValueHolder
+class ValueHolder extends Response
 {
     // TODO decode ion binary
     public string $IonBinary;
     public string $IonText;
 }
 
-class IOUsage
+class IOUsage extends Response
 {
     public int $ReadIOs;
     public int $WriteIOs;
 }
 
-class StartTransactionResponse
+class StartTransactionResponse extends Response
 {
     public string $TransactionId;
     public TimingInformation $TimingInformation;
 }
 
-class StartSessionResponse
+class StartSessionResponse extends Response
 {
     public string $SessionToken;
     public TimingInformation $TimingInformation;
 }
 
-class EndStatementResponse
+class EndStatementResponse extends Response
 {
     public TimingInformation $TimingInformation;
 }
 
-class TimingInformation
+class TimingInformation extends Response
 {
     public int $ProcessingTimeMilliseconds;
 }
