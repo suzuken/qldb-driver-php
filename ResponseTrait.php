@@ -22,13 +22,14 @@ trait ResponseTrait
         if ($type->allowsNull() && $value === null) {
             $this->$attr = null;
         }
-        switch ($type->getName()) {
+        $name = $type->getName();
+        switch ($name) {
             case 'int':
             case 'bool':
             case 'string':
                 $this->$attr = $value;
             case 'array':
-                $t = $this->readArrayVar();
+                $t = $this->readArrayVar($prop);
                 if ($t === null) {
                     $this->$attr = $value;
                     break;
@@ -36,7 +37,7 @@ trait ResponseTrait
                 $this->$attr = array_map(fn ($v) => new $t($v), $value);
             default:
                 // NOTE: user defined class.
-                $this->$attr = new $type($value);
+                $this->$attr = new $name($value);
         }
     }
 
