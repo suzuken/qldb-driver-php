@@ -47,8 +47,9 @@ class QLDBDriver
         return $this->isClosed;
     }
 
-    public function execute(CommandInterface $fn)
+    public function execute($fn)
     {
+        // TODO retry, handling transactions etc.
         if ($this->isClosed) {
             throw new RuntimeException("QLDBDriver is closed.");
         }
