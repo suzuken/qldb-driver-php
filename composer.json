@@ -12,5 +12,11 @@
     "require": {
       "php": ">=7.4",
         "aws/aws-sdk-php": "^3.185"
+    },
+    "autoload": {
+        "psr-4": { "Suzuken\\QLDBDriver\\": "" },
+        "exclude-from-classmap": [
+            "/Tests/"
+        ]
     }
 }
